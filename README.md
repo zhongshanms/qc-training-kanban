@@ -18,7 +18,8 @@
 | `preview-local.bat` | 双击即可在本地浏览器预览 |
 | `upload-cos.js` | 一键发布到腾讯云 COS |
 | `upload-cos.example.env` | COS 配置模板 |
-| `deploy-github.bat` | 一键部署到 GitHub Pages |
+| `deploy-github.bat` | 一键部署到 GitHub Pages（启动器） |
+| `deploy-github.ps1` | 部署主脚本（PowerShell，推荐右键用 PowerShell 运行） |
 
 ---
 
@@ -75,7 +76,14 @@ https://qctraining-1250000000.cos-website.ap-guangzhou.myqcloud.com/
 ## 🌍 方式三：发布到 GitHub Pages（全球访问）
 
 ### 方法 A：一键脚本（推荐）
-双击 `deploy-github.bat`，脚本会：
+
+**方案 1：双击运行（推荐）**
+双击 `deploy-github.bat`，会自动调用 PowerShell 脚本完成部署。
+
+**方案 2：右键运行（兼容性最好）**
+右键点击 `deploy-github.ps1` → 选择 **使用 PowerShell 运行**。
+
+脚本会：
 1. 检查 GitHub CLI 登录状态（未登录则引导你登录）
 2. 自动创建公共仓库 `zhongshanms/binboard`
 3. 推送代码
