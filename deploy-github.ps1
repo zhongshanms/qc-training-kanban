@@ -1,21 +1,21 @@
 <#
 .SYNOPSIS
-  一键部署 binboard (质检培训看板) 到 GitHub Pages
+  一键部署 质检培训看板 到 GitHub Pages
 .DESCRIPTION
   1. 检查 gh CLI 登录状态
-  2. 创建 GitHub 仓库 zhongshanms/binboard (公共)
+  2. 创建 GitHub 仓库 zhongshanms/qc-training-kanban (公共)
   3. 推送代码
   4. 启用 GitHub Pages
 #>
 
 $ErrorActionPreference = "Stop"
 $GH = "C:\Program Files\GitHub CLI\gh.exe"
-$REPO_DIR = "C:\Users\cr\ZCodeProject\binboard"
-$REPO = "zhongshanms/binboard"
-$REPO_NAME = "binboard"
+$REPO_DIR = "C:\Users\cr\ZCodeProject\质检培训看板"
+$REPO = "zhongshanms/qc-training-kanban"
+$REPO_NAME = "qc-training-kanban"
 
 Write-Host "============================================" -ForegroundColor Cyan
-Write-Host "  binboard - GitHub Pages 部署脚本" -ForegroundColor Cyan
+Write-Host "  质检培训看板 - GitHub Pages 部署脚本" -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -40,22 +40,18 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Host "[OK] GitHub CLI 已就绪" -ForegroundColor Green
 
-# Step 2: Create GitHub repo and push
-Write-Host "[3/4] 创建 GitHub 仓库并推送代码..." -ForegroundColor Yellow
-$createResult = & $GH repo create $REPO --public --source="$REPO_DIR" --remote=origin --push --description="质检培训看板 - 门锁/灯饰/导轨质检标准和日常管理" 2>&1
+# Step 2: Push code to existing repo
+Write-Host "[3/4] 推送代码到 GitHub..." -ForegroundColor Yellow
+Push-Location $REPO_DIR
+git remote add origin "https://github.com/$REPO.git" 2>$null
+git push -u origin main 2>&1
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "[!] 仓库可能已存在，尝试直接推送..." -ForegroundColor Yellow
-    Push-Location $REPO_DIR
-    git remote add origin "https://github.com/$REPO.git" 2>$null
-    git push -u origin main 2>&1
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "[!] 推送失败，请检查仓库 $REPO_NAME 是否已创建" -ForegroundColor Red
-        Pop-Location
-        Read-Host "按回车键退出"
-        exit 1
-    }
+    Write-Host "[!] 推送失败，请检查仓库 $REPO" -ForegroundColor Red
     Pop-Location
+    Read-Host "按回车键退出"
+    exit 1
 }
+Pop-Location
 Write-Host "[OK] 代码已推送到 GitHub" -ForegroundColor Green
 
 # Step 3: Enable GitHub Pages
@@ -72,7 +68,7 @@ Write-Host "============================================" -ForegroundColor Green
 Write-Host "  部署完成！" -ForegroundColor Green
 Write-Host ""
 Write-Host "  访问地址:" -ForegroundColor White
-Write-Host "  https://zhongshanms.github.io/binboard/" -ForegroundColor Cyan
+Write-Host "  https://zhongshanms.github.io/qc-training-kanban/" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  GitHub Pages 首次部署可能需要 1-2 分钟生效" -ForegroundColor Yellow
 Write-Host "============================================" -ForegroundColor Green
