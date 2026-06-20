@@ -18,6 +18,7 @@
 | `preview-local.bat` | 双击即可在本地浏览器预览 |
 | `upload-cos.js` | 一键发布到腾讯云 COS |
 | `upload-cos.example.env` | COS 配置模板 |
+| `deploy-github.bat` | 一键部署到 GitHub Pages |
 
 ---
 
@@ -68,6 +69,34 @@ https://qctraining-1250000000.cos-website.ap-guangzhou.myqcloud.com/
 打开"静态网站"开关，索引文档填 `index.html`，保存即可。
 
 > 之后内容有更新，只需改 `data.js` / `app.js` 等，再跑一次 `node upload-cos.js` 即覆盖。
+
+---
+
+## 🌍 方式三：发布到 GitHub Pages（全球访问）
+
+### 方法 A：一键脚本（推荐）
+双击 `deploy-github.bat`，脚本会：
+1. 检查 GitHub CLI 登录状态（未登录则引导你登录）
+2. 自动创建公共仓库 `zhongshanms/binboard`
+3. 推送代码
+4. 启用 GitHub Pages
+
+访问地址：`https://zhongshanms.github.io/binboard/`
+
+### 方法 B：手动操作
+如果你偏好手动操作：
+1. 在 https://github.com/new 创建一个名为 `binboard` 的公共仓库
+2. 在本地执行：
+   ```
+   cd C:\Users\cr\ZCodeProject\binboard
+   git remote add origin https://github.com/zhongshanms/binboard.git
+   git branch -M main
+   git push -u origin main
+   ```
+3. 进入仓库 Settings → Pages → 选择 main 分支 → 保存
+4. 等待 1-2 分钟后访问 `https://zhongshanms.github.io/binboard/`
+
+> 之后内容更新：改完文件后执行 `git add . && git commit -m "update" && git push` 即可自动部署。
 
 ---
 
