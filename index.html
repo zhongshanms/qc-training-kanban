@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>质检培训看板 · 门锁 / 灯饰 / 导轨</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">🛠️</span>
+    <div class="brand-text">
+      <h1>质检培训看板</h1>
+      <span class="sub">门锁 · 灯饰 · 导轨 · 通用判定标准</span>
+    </div>
+  </div>
+  <nav class="tabs">
+    <a href="#/home" class="tab" data-route="home">首页</a>
+    <a href="#/lock" class="tab" data-route="lock">门锁</a>
+    <a href="#/light" class="tab" data-route="light">灯饰</a>
+    <a href="#/track" class="tab" data-route="track">导轨</a>
+    <a href="#/standard" class="tab" data-route="standard">通用标准</a>
+  </nav>
+  <div class="search">
+    <input id="searchBox" type="search" placeholder="🔍 搜索检查项 / 标准 / SKU…" autocomplete="off">
+  </div>
+</header>
+
+<main id="view" class="view"></main>
+
+<footer class="footer">
+  <span>质检培训看板 <span id="ver"></span></span>
+  <span>内容源自内部质检 SOP 与判定标准，仅供培训学习</span>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

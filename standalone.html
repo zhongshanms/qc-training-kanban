@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>质检培训看板 · 门锁 / 灯饰 / 导轨</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
+<style>
+:root{
+  --bg:#f5f7fa; --card:#fff; --ink:#1f2937; --muted:#6b7280;
+  --line:#e5e7eb; --primary:#2563eb; --accent:#0d9488;
+  --ok:#16a34a; --warn:#d97706; --bad:#dc2626;
+  --radius:14px; --shadow:0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.6;
+}
+/* topbar */
+.topbar{
+  position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:24px;
+  padding:0 24px;height:64px;background:rgba(255,255,255,.92);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{font-size:26px}
+.brand-text h1{font-size:17px;margin:0;letter-spacing:.5px}
+.brand-text .sub{font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:4px;margin-left:auto}
+.tab{
+  padding:8px 16px;border-radius:999px;text-decoration:none;color:var(--muted);
+  font-size:14px;font-weight:600;transition:.15s;white-space:nowrap;
+}
+.tab:hover{background:#eef2f7;color:var(--ink)}
+.tab.active{background:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.3)}
+.search{margin-left:8px}
+.search input{
+  width:230px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;
+  font-size:14px;outline:none;background:#fff;transition:.15s;
+}
+.search input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+
+.view{max-width:1180px;margin:0 auto;padding:28px 24px 80px;min-height:calc(100vh - 64px)}
+
+/* footer */
+.footer{
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  padding:18px 24px;border-top:1px solid var(--line);color:var(--muted);
+  font-size:12px;background:#fff;
+}
+
+/* page head */
+.page-head{margin-bottom:24px}
+.page-head h2{margin:0 0 6px;font-size:26px;display:flex;align-items:center;gap:10px}
+.page-head p{margin:0;color:var(--muted);font-size:14px}
+.crumbs{font-size:12px;color:var(--muted);margin-bottom:10px}
+.crumbs a{color:var(--primary);text-decoration:none}
+
+/* card */
+.card{
+  background:var(--card);border-radius:var(--radius);padding:22px 24px;
+  box-shadow:var(--shadow);margin-bottom:20px;border:1px solid var(--line);
+}
+.card-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.card-title h3{margin:0;font-size:18px}
+.card-title .src{font-size:11px;color:var(--muted);background:#f3f4f6;padding:3px 9px;border-radius:6px;white-space:nowrap}
+.note{font-size:13px;color:var(--muted);margin:-4px 0 16px}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-size:14px;table-layout:fixed}
+th,td{text-align:left;padding:11px 15px;border-bottom:1px solid var(--line);vertical-align:top;word-break:break-word}
+th{background:#f9fafb;font-weight:600;color:#374151;position:sticky;top:0}
+tbody tr:hover{background:#fafbfc}
+/* 两列表格：左列标题窄，右列内容宽 */
+table.col2 th:first-child,table.col2 td:first-child{width:42%}
+table.col2 th:last-child,table.col2 td:last-child{width:58%}
+td.num,th.num{width:54px;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
+.mono{font-family:Consolas,"Courier New",monospace}
+pre.cell{white-space:pre-wrap;margin:0;font-family:inherit;font-size:14px}
+
+/* badges */
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.b-crit{background:#fee2e2;color:#b91c1c}
+.b-main{background:#ffedd5;color:#c2410c}
+.b-min{background:#dcfce7;color:#15803d}
+
+/* logic */
+.logic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:18px}
+.logic-card{border:1px solid var(--line);border-radius:10px;padding:14px;background:#fff}
+.logic-card.single{border-left:4px solid var(--primary)}
+.logic-card.master{border-left:4px solid var(--warn)}
+.logic-card .lbl{font-size:12px;color:var(--muted);margin-bottom:8px}
+.logic-card .skus{display:flex;flex-wrap:wrap;gap:6px}
+.logic-card .sku{font-family:Consolas,monospace;background:#f3f4f6;padding:3px 8px;border-radius:5px;font-size:13px}
+.rules{background:#eff6ff;border-radius:10px;padding:16px 20px;border-left:4px solid var(--primary)}
+.rules ol{margin:0;padding-left:20px}
+.rules li{margin-bottom:6px;font-size:14px}
+
+/* compare */
+.cmp{display:grid;grid-template-columns:120px 1fr 1fr;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.cmp .h{background:#f9fafb;font-weight:600;padding:10px 14px;border-bottom:1px solid var(--line);text-align:center}
+.cmp .item{font-weight:600;padding:12px 14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);background:#fafbfc}
+.cmp .cell{padding:12px 14px;border-bottom:1px solid var(--line)}
+.cmp .cell.us{border-right:1px solid var(--line)}
+.cmp .row:last-child>*{border-bottom:none}
+.cmp-flag{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px}
+.flag-us{color:#1d4ed8}.flag-eu{color:#b45309}
+.footer-note{margin-top:14px;background:#fef3c7;border-radius:8px;padding:12px 16px;font-size:13px;color:#92400e}
+
+/* grade */
+.grade{border-left:6px solid var(--bad);border-radius:0 10px 10px 0;padding:18px 22px;margin-bottom:16px;background:#fff;border:1px solid var(--line);border-left-width:6px}
+.grade.main{border-left-color:var(--warn)}
+.grade.min{border-left-color:var(--ok)}
+.grade h4{margin:0 0 4px;font-size:17px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.grade .rate{font-weight:600;color:#374151;font-size:13px;margin-bottom:10px}
+.grade dl{margin:6px 0 0;display:grid;grid-template-columns:88px 1fr;gap:6px 12px;font-size:14px}
+.grade dt{color:var(--muted);font-weight:600}
+.grade dd{margin:0}
+
+/* doc */
+.doc-block{margin-bottom:20px}
+.doc-block h4{font-size:17px;margin:0 0 8px;color:var(--primary);border-left:4px solid var(--primary);padding-left:10px}
+.doc-block h5{font-size:15px;margin:14px 0 6px;color:#374151}
+.doc-block p{margin:0 0 8px;font-size:14px}
+.doc-block ul{margin:0 0 8px;padding-left:22px}
+.doc-block li{margin-bottom:5px;font-size:14px}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:8px 14px;background:#f9fafb;border-radius:8px;padding:14px 18px;margin:6px 0}
+.kv .k{color:var(--muted);font-weight:600}
+
+/* home */
+.hero{text-align:center;padding:40px 20px 30px}
+.hero .big{font-size:30px;font-weight:800;margin:0 0 10px}
+.hero .lead{color:var(--muted);font-size:15px;max-width:640px;margin:0 auto}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;margin-top:30px}
+.cat-card{
+  text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);transition:.18s;
+  display:block;position:relative;overflow:hidden;
+}
+.cat-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.1)}
+.cat-card .ic{font-size:38px;margin-bottom:12px;display:block}
+.cat-card h3{margin:0 0 6px;font-size:18px}
+.cat-card p{margin:0;color:var(--muted);font-size:13px}
+.cat-card .tag{position:absolute;top:16px;right:16px;width:10px;height:10px;border-radius:50%}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:26px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;text-align:center}
+.stat .n{font-size:24px;font-weight:800}
+.stat .l{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* search highlight */
+mark{background:#fde68a;border-radius:3px;padding:0 2px}
+.hidden{display:none!important}
+
+@media(max-width:820px){
+  .topbar{height:auto;padding:10px 14px;gap:10px}
+  .brand-text .sub{display:none}
+  .tabs{margin-left:0;order:3;width:100%;overflow-x:auto}
+  .search{margin-left:auto;order:2}
+  .search input{width:140px}
+  .view{padding:18px 14px 60px}
+  .cmp{grid-template-columns:1fr}
+  .cmp .item{border-right:none}
+  .cmp .cell.us{border-right:none;border-bottom:1px solid var(--line)}
+  .grade dl{grid-template-columns:1fr}
+  .kv{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">🛠️</span>
+    <div class="brand-text">
+      <h1>质检培训看板</h1>
+      <span class="sub">门锁 · 灯饰 · 导轨 · 通用判定标准</span>
+    </div>
+  </div>
+  <nav class="tabs">
+    <a href="#/home" class="tab" data-route="home">首页</a>
+    <a href="#/lock" class="tab" data-route="lock">门锁</a>
+    <a href="#/light" class="tab" data-route="light">灯饰</a>
+    <a href="#/track" class="tab" data-route="track">导轨</a>
+    <a href="#/standard" class="tab" data-route="standard">通用标准</a>
+  </nav>
+  <div class="search">
+    <input id="searchBox" type="search" placeholder="🔍 搜索检查项 / 标准 / SKU…" autocomplete="off">
+  </div>
+</header>
+
+<main id="view" class="view"></main>
+
+<footer class="footer">
+  <span>质检培训看板 <span id="ver"></span></span>
+  <span>内容源自内部质检 SOP 与判定标准，仅供培训学习</span>
+</footer>
+
+<script>
+/* 看板数据 —— 内容直接源自桌面 6 份源文件，文字逻辑保持原样。
+   图片占位（=DISPIMG(...)）在原文件中无实际图片数据，已用说明替代。 */
+window.QC_DATA = {
+  meta: {
+    version: "V1 · 2026-06-19",
+    source: "门锁/灯饰/导轨 质检培训资料整理"
+  },
+  // ============ 门锁 ============
+  lock: {
+    title: "门锁质检",
+    color: "#2563eb",
+    sections: [
+      {
+        type: "table",
+        title: "门锁基础质检流程",
+        source: "门锁基础质检流程.xlsx",
+        headers: ["序列", "检查项目", "检验描述"],
+        rows: [
+          ["1", "包装外观", "包装完好无损、无受潮、变形、涂抹"],
+          ["2", "标签条码", "条码清晰可扫、信息准确"],
+          ["3", "数量清点", "包裹内产品数量、配件正确"],
+          ["4", "整体外观", "无磕碰、毛刺、掉漆、生锈、变形"],
+          ["5", "配件检查", "1.螺丝、锁利、扣板、扣盒、前后挡盖、拆装扳手、说明书、钥匙正确且齐全，所有D型扣板为铁质\n2.ORB/OB/OD系列配件为黑色，其他系列配件与主体色一致\n3.锁利规格严格区分45度/90度开启角度"],
+          ["6", "钥匙开关", "钥匙拔插顺畅、转动无卡顿、匹配正确锁芯"],
+          ["7", "反锁功能测试", "安装测试，反锁功能正常，锁定按钮压力标准：8N~15N±1N，若按压力小于8N或大于15N触发锁定，判定不良"],
+          ["8", "结构功能", "检查螺丝、锁孔无歪斜，锁芯牢固不松动，执手/锁球转动回弹有力无异响，无下垂"]
+        ]
+      },
+      {
+        type: "logic",
+        title: "单开 / 通开 识别逻辑",
+        source: "门锁单开通开逻辑.xlsx",
+        examples: [
+          { label: "单开门锁主SKU示例", vals: ["MS7812BK21", "MS7812BK21T1"] },
+          { label: "单开门锁组合SKU示例", vals: ["MS7812BK21-2", "MS7812BK21T1-2"] },
+          { label: "通开门锁主SKU示例", vals: ["MS7812BK21T2", "MS7812BK21T3"] },
+          { label: "通开门锁组合SKU示例", vals: ["MS7812BK21T2-2", "MS7812BK21T3-3"] }
+        ],
+        rules: [
+          "主SKU和组合SKU中不带\"T\"或带有\"T1\"的为单开",
+          "主SKU和组合SKU中有\"TX\"的为通开（X表示除去1的任意阿拉伯数字）",
+          "单Pack包裹和大拉手锁是单把锁独立包装，不存在单开和通开逻辑"
+        ]
+      }
+    ]
+  },
+
+  // ============ 灯饰 ============
+  light: {
+    title: "灯饰质检",
+    color: "#d97706",
+    sections: [
+      {
+        type: "compare",
+        title: "欧美规灯饰质检项区别",
+        source: "欧美规灯饰质检项区别.xlsx",
+        note: "灯饰质检欧美标准区分",
+        pairs: [
+          { item: "电线规格", us: "火线、零线：18AWG（线芯直径≈1.02mm）\n地线：20AWG（线芯直径≈0.8mm)", eu: "火线、零线：0.75m㎡（线芯直径≈1mm)\n地线：0.5m㎡（线芯直径≈0.8mm)" },
+          { item: "电线执行标准", us: "火线：UL认证纯黑色绝缘层铜线\n零线：UL认证纯白色绝缘层铜线\n地线：无绝缘裸铜线或黄绿色绝缘层线", eu: "火线：CE或VDE认证深棕色绝缘层铜线\n零线：CE或VDE认证天蓝色绝缘层铜线\n地线：无绝缘裸铜线" },
+          { item: "灯头、LED光源、驱动", us: "UL或FCC认证", eu: "CE认证" },
+          { item: "电路电压标准", us: "标准电压：110-120V/60Hz", eu: "标准电压：220V-230V/50Hz" },
+          { item: "功率标准", us: "实际测量功率与标识功率误差范围10%以内", eu: "实际测量功率与标识功率误差范围10%以内" },
+          { item: "挂板配件", us: "轻型灯具挂板厚度1mm，重型灯具挂板厚度2mm；美制螺牙；边挂耳朵根据灯具情况进行相应调整", eu: "一字挂板\n轻型灯具挂板厚度1mm，重型灯具挂板厚度2mm；边挂耳朵根据灯具情况进行相应调整" },
+          { item: "光亮度衰减", us: "1万小时后仍维持初始亮度的70%", eu: "1万小时后仍维持初始亮度的70%" }
+        ],
+        footer: "LED灯饰，可变光/调光/调色灯饰、防水灯饰需要电源驱动，驱动类型：恒压驱动，恒流驱动，调光驱动，驱动电源功率应高于灯具总功率的20%-30%"
+      },
+      {
+        type: "doc",
+        title: "易碎灯饰摔箱测试 SOP",
+        source: "易碎灯饰摔箱测试SOP.docx",
+        doc: [
+          { h: "一、目的", p: "规范易碎灯饰产品摔箱测试的操作流程、判定标准及异常处理，确保产品包装能承受运输过程中的正常跌落冲击，保障终端到货质量，统一测试方法与判定依据。" },
+          { h: "二、适用范围", p: "本 SOP 适用于本公司采购及生产的单箱毛重≤20kg的所有易碎灯饰产品，包括玻璃 / 陶瓷灯罩灯饰、水晶挂件灯饰、金属薄壁结构吸顶灯、吊灯、壁灯、台灯等。单箱毛重＞20kg 的易碎灯饰产品，多人共同执行专项摔箱测试方案。" },
+          { h: "三、职责分工", list: [
+            "供应商管理：负责配合提供待测试的合格批次产品，并将测试结果反馈给供应商，督促其提交包装优化方案并验证整改效果",
+            "产品质量-中山仓：负责摔箱测试的全程操作、结果检验、记录填写及报告出具；负责不合格品的判定与跟踪处理"
+          ]},
+          { h: "四、工具与设备准备", table: {
+            headers: ["序号", "工具 / 设备名称", "规格要求", "用途"],
+            rows: [
+              ["1", "电子秤", "精度 ±0.1kg，量程 0-50kg", "称量样品单箱毛重"],
+              ["2", "钢卷尺", "量程 0-2m，精度 ±1mm", "测量跌落高度"],
+              ["3", "记号笔 / 封箱胶带", "普通油性记号笔、4.5CM宽透明胶带", "测试标记、封箱"],
+              ["4", "《摔箱测试记录表》", "电子表格图片/视频", "记录试验全过程数据"],
+              ["5", "光源", "根据灯头适配", "跌落后点亮测试"]
+            ]
+          }},
+          { h: "五、试验前准备", list: [
+            "跌落表面：混凝土或厚度≥8mm 的钢板制成的平滑、坚硬刚性表面，表面平整度误差≤2mm/m",
+            "跌落区域：清理所有杂物，确保跌落范围内人员有安全距离、无障碍物、无风扇等产生的强气流干扰",
+            "场地周边禁止无关人员进入测试区域",
+            "用电子秤称量每箱毛重并记录，确认单箱毛重≤20kg",
+            "检查外箱封箱状态，确保封箱胶带牢固、外箱无预破损、无变形",
+            "用记号笔在每箱外箱标注测试顺序（如：S1、S2、S3）"
+          ]},
+          { sub: "5.1 初始状态检验", list: [
+            "打开样品箱，对箱内所有产品及配件进行 100% 全检",
+            "检查内容：易碎部件（玻璃、陶瓷、水晶等）无裂纹 / 崩边 / 碎裂、结构件无变形 / 松动、配件齐全、表面无划痕 / 掉漆",
+            "点亮测试：通电点亮 ，确认无闪烁、异响、断路",
+            "拍摄初始状态照片/视频，记录检验结果；确认无任何损伤后，按原包装方式重新封装，确保与正常出货状态一致"
+          ]},
+          { h: "六、标准操作流程", sub: "6.1 核心测试参数", kv: [
+            ["统一跌落高度", "120cm（样品最低点至跌落表面的垂直距离）"],
+            ["跌落次数", "总计 10 次（1 角 + 3 棱 + 6 面）"],
+            ["跌落方式", "初速度为零的自由垂直跌落，不得施加任何外力；样品重力线必须通过被跌落的面、棱、角，并垂直于地面。"]
+          ]},
+          { sub: "6.2 跌落顺序（可倒置产品）", p: "所有可倒置的易碎灯饰产品，严格按以下顺序依次跌落，每完成一次跌落，需短暂观察外箱状态，无严重破裂方可继续下一次：", list: [
+            "选择纸箱任意一个底角，调整位置使重力线通过该角，自由跌落 1 次；",
+            "跌落该底角连接的最短棱，重力线垂直于该棱中点，自由跌落 1 次；",
+            "跌落该底角连接的第二短棱，重力线垂直于该棱中点，自由跌落 1 次；",
+            "跌落该底角连接的最长棱，重力线垂直于该棱中点，自由跌落 1 次；",
+            "跌落靠近该角的最小平面 1，重力线垂直于平面中心，自由跌落 1 次；",
+            "跌落相对的最小平面 2，重力线垂直于平面中心，自由跌落 1 次；",
+            "跌落靠近该角的第二小平面 1，重力线垂直于平面中心，自由跌落 1 次；",
+            "跌落相对的第二小平面 2，重力线垂直于平面中心，自由跌落 1 次；",
+            "跌落靠近该角的最大平面 1，重力线垂直于平面中心，自由跌落 1 次；",
+            "跌落相对的最大平面 2，重力线垂直于平面中心，自由跌落 1 次。"
+          ]},
+          { sub: "6.3 特殊跌落要求", list: [
+            "每跌落一次，晃动外箱判断内部是否有异常，若有异常则记录最后跌落面的编号",
+            "明确标注 “不可倒置” 的产品，无需按上述顺序跌落，仅对产品底面连续进行 6 次自由跌落试验，每次跌落间隔 1 分钟"
+          ]},
+          { sub: "6.4 试验后检验流程", list: [
+            "外箱检查：记录外箱破损、变形程度，封箱胶带脱落长度；拍摄外箱状态照片；",
+            "缓冲材料检查：打开外箱，检查泡沫、珍珠棉、气柱袋等缓冲材料是否破损、移位，产品是否在箱内发生窜动；",
+            "外观与结构检查：重点检查所有易碎部件，确认无裂纹、崩边、掉角、碎裂、脱落；检查金属结构件是否开裂、变形，紧固件是否松动、脱落；核对所有配件数量，尝试完整组装产品，确认安装后结构稳固、无晃动；检查产品表面涂层是否大面积脱落、划痕",
+            "通电点亮 10分钟，无闪烁、异响、漏电、发热异常",
+            "逐项填写《摔箱测试记录表》，对所有损伤部位进行标记并拍照存档。"
+          ]},
+          { h: "七、合格判定标准", sub: "7.1 合格判定", list: [
+            "外箱无严重破裂、无穿孔，封箱胶带无脱落",
+            "箱内缓冲材料无明显破损、移位，产品无窜动",
+            "产品无任何机械损伤，配件齐全，可正常组装且结构稳固"
+          ]},
+          { sub: "7.2 不合格判定", p: "出现以下任一情况，直接判定该批次产品摔箱测试不合格：", list: [
+            "样品出现易碎部件破损、裂痕、结构无法组装的严重损伤",
+            "样品出现任何形式的机械损伤或电路性能异常"
+          ]},
+          { h: "八、记录与存档", list: [
+            "测试完成后 1 个工作日内，测试人员需填写《摔箱测试记录表》，按照表头要求格式填写，附所有试验前后照片",
+            "所有原始记录、报告及照片需存档至少 2 年",
+            "摔箱测试后的所有样品原则上不得作为合格品出货，统一做报废或拆解处理"
+          ]},
+          { h: "九、安全注意事项", list: [
+            "跌落样品时，测试人员需站在跌落区域 1.5m 以外的安全位置，严禁站在样品跌落方向的正前方",
+            "搬运样品时注意轻拿轻放，避免样品提前跌落造成人员受伤或测试结果失效",
+            "点亮测试时严格遵守电气安全操作规程，防止触电事故发生"
+          ]}
+        ]
+      }
+    ]
+  },
+
+  // ============ 导轨 ============
+  track: {
+    title: "导轨质检",
+    color: "#0d9488",
+    sections: [
+      {
+        type: "table",
+        title: "导轨基础质检流程",
+        source: "导轨基础质检流程.xlsx",
+        headers: ["序列", "检查项目", "检验描述"],
+        rows: [
+          ["1", "外观检查", "1.外观无划痕、变形、生锈、压弯、毛刺、颗粒\n2.表面处理无掉漆现象"],
+          ["2", "尺寸测量", "测量导轨的尺长、宽、高、重量、厚度等符合质检项数据要求"],
+          ["3", "包装检查", "1.唛头标签数据正确，与实物一致\n2.包装无破损、污渍、湿水\n3.封包完整，内部无空间浪费，封箱胶无堆积"],
+          ["4", "功能检查", "1.组件或结合处牢固，用于紧固的组件不应松动\n2.所有组件无磨损、变形，功能正常\n3.导轨滑出收回至极限尺寸，中途无卡顿"],
+          ["5", "配件检查", "1.品牌正确，说明书文字符合国家站点的语言\n2.螺丝、调节器等配件齐全，符合质检项标准"]
+        ]
+      }
+    ]
+  },
+
+  // ============ 通用标准 ============
+  standard: {
+    title: "通用判定标准",
+    color: "#7c3aed",
+    sections: [
+      {
+        type: "grade",
+        title: "收发货不良判定 — 缺陷分级",
+        source: "收发货不良判定标准V1.xlsx · 退换货标准",
+        grades: [
+          {
+            level: "关键缺陷",
+            rate: "不良率 ≥ 1% → 整批退货 / 返工",
+            define: "影响安全、合规、核心功能，如：①不符合法律、法规 ②缺少核心配件/尺寸超差无法装配 ③配件/螺丝强度不达标易断裂",
+            quick: "「用了必有问题」：易伤到人、违法、炸/漏/断/完全不能用",
+            detail: "尺寸超差无法装配，缺少核心配件无法使用，核心功能失效，标签实物不符"
+          },
+          {
+            level: "主要缺陷",
+            rate: "＞1% 整批退货/返工，≤1% 特采",
+            define: "影响使用功能、批量一致性，如：①螺母螺纹滑丝/未打胶固定 ②表面电镀层脱落严重 ③产品精度误差超出行业标准",
+            quick: "「用不了/不好用」：装不上、用几次就坏、锈得快、功能问题",
+            detail: "螺牙滑丝/错位，焊口开裂/组件脱落，变形不可用，卡顿/虚位大，规格尺寸不符，配件缺失/不匹配，弹力/推力衰减，严重不对称，严重生锈/色差"
+          },
+          {
+            level: "次要缺陷",
+            rate: "＞3% 返工、有偿挑选，≤3% 特采",
+            define: "不影响功能，仅外观轻微瑕疵，如：①表面微小划痕（长度≤1cm、宽度≤1mm、深度≤0.5mm，三项全超标判断为主要缺陷）②标签印刷轻微偏移",
+            quick: "「能用但不好看」：划痕、轻微不对称、缺说明书/小装饰品",
+            detail: "表面微小划痕/颗粒/斑点/凹坑/掉漆/轻微色差（室外白天正常环境1米距离看不清），不会产生伤害的细小毛刺"
+          }
+        ]
+      },
+      {
+        type: "table",
+        title: "异常问题处理办法",
+        source: "收发货不良判定标准V1.xlsx · 异常问题处理办法",
+        note: "质检发现的问题 → 处理办法",
+        headers: ["质检发现的问题", "处理办法"],
+        rows: [
+          ["1.主图/实物/标签不符（颜色/造型/材质等）", "判定MSKU批量不良，钉钉群反馈产品、采购、跟单"],
+          ["2.质检系统无主图参照", "钉钉群反馈产品、采购（确认无误后质检）"],
+          ["3.品名描述与实物不符（颜色/造型/材质等）", "判定MSKU批量不良，钉钉群反馈产品、采购"],
+          ["4.产品实物/功能与系统资料不符", "判定MSKU批量不良，钉钉群反馈产品、采购"],
+          ["5.单个/N个产品外观不良", "＞3%判定MSKU整批不良，≤3%填写实际不良数"],
+          ["6.单个/N个产品功能不良/缺失配件", "判定MSKU整批不良"],
+          ["7.老产品主图缺失/SKU变更导致主图缺失", "钉钉群联系产品工程师确认"],
+          ["8.新产品主图缺失", "联系产品工程师确认（确认无误后质检）"]
+        ]
+      },
+      {
+        type: "table",
+        title: "直发质检拍照标准",
+        source: "收发货不良判定标准V1.xlsx · 直发质检拍照标准",
+        note: "各场景的处理方式",
+        headers: ["场景", "处理方式"],
+        rows: [
+          ["1.没有产品主图和质检标准图", "缺少产品主图/品牌，产品/采购确认无误，可以发货"],
+          ["2.没有产品主图有质检标准图", "对照质检标准图检验"],
+          ["3.不确定产品外观/配件等是否正确", "钉钉(直发仓出货群)群里@跟单和采购，说明问题详情"]
+        ]
+      }
+    ]
+  }
+};
+
+
+/* app.js — 质检培训看板前端逻辑（纯客户端 SPA） */
+(function () {
+  "use strict";
+  const D = window.QC_DATA;
+  const view = document.getElementById("view");
+  const verEl = document.getElementById("ver");
+
+  const esc = (s) =>
+    String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+  // 把单元格文本（含 \n）渲染为 <pre>；支持搜索高亮
+  function cell(text, q) {
+    let t = esc(text);
+    if (q) {
+      const re = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "ig");
+      t = t.replace(re, "<mark>$1</mark>");
+    }
+    return '<pre class="cell">' + t.replace(/\n/g, "<br>") + "</pre>";
+  }
+
+  function src(tag) {
+    return tag ? '<span class="src">' + esc(tag) + "</span>" : "";
+  }
+
+  // ---- 渲染各 section 类型 ----
+  function renderTable(s, q) {
+    let rows = s.rows
+      .map((r, i) => {
+        const tds = r
+          .map((c, ci) => "<td" + (ci === 0 ? ' class="num"' : "") + ">" + cell(c, q) + "</td>")
+          .join("");
+        return "<tr>" + tds + "</tr>";
+      })
+      .join("");
+    const ths = s.headers
+      .map((h, i) => "<th" + (i === 0 ? ' class="num"' : "") + ">" + esc(h) + "</th>")
+      .join("");
+    const cls = s.headers.length === 2 ? ' class="col2"' : "";
+    return (
+      '<section class="card"><div class="card-title"><h3>' +
+      esc(s.title) + "</h3>" + src(s.source) +
+      '</div>' + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "") +
+      '<div class="table-wrap"><table' + cls + '><thead><tr>' + ths +
+      '</tr></thead><tbody>' + rows + "</tbody></table></div></section>"
+    );
+  }
+
+  function renderLogic(s, q) {
+    const cards = s.examples
+      .map((e) => {
+        const isMaster = /通开/.test(e.label);
+        const skus = e.vals
+          .map((v) => '<span class="sku">' + cell(v, q) + "</span>")
+          .join("");
+        return (
+          '<div class="logic-card ' + (isMaster ? "master" : "single") + '"><div class="lbl">' +
+          esc(e.label) + '</div><div class="skus">' + skus + "</div></div>"
+        );
+      })
+      .join("");
+    const rules = s.rules
+      .map((r) => "<li>" + cell(r, q) + "</li>")
+      .join("");
+    return (
+      '<section class="card"><div class="card-title"><h3>' + esc(s.title) +
+      "</h3>" + src(s.source) + '</div><div class="logic-grid">' + cards +
+      '</div><div class="rules"><ol>' + rules + "</ol></div></section>"
+    );
+  }
+
+  function renderCompare(s, q) {
+    const rows = s.pairs
+      .map((p) => {
+        return (
+          '<div class="row" style="display:contents">' +
+          '<div class="item">' + esc(p.item) + "</div>" +
+          '<div class="cell us">' + cell(p.us, q) + "</div>" +
+          '<div class="cell eu">' + cell(p.eu, q) + "</div>" +
+          "</div>"
+        );
+      })
+      .join("");
+    return (
+      '<section class="card"><div class="card-title"><h3>' + esc(s.title) +
+      "</h3>" + src(s.source) + '</div>' + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "") +
+      '<div class="cmp"><div class="h"></div>' +
+      '<div class="h"><span class="cmp-flag flag-us">🇺🇸 美国标准</span></div>' +
+      '<div class="h"><span class="cmp-flag flag-eu">🇪🇺 欧洲标准</span></div>' +
+      rows + "</div>" +
+      (s.footer ? '<div class="footer-note">⚙️ ' + esc(s.footer) + "</div>" : "") +
+      "</section>"
+    );
+  }
+
+  function renderGrade(s) {
+    const colors = { "关键缺陷": "", "主要缺陷": "main", "次要缺陷": "min" };
+    const badges = { "关键缺陷": "b-crit", "主要缺陷": "b-main", "次要缺陷": "b-min" };
+    const blocks = s.grades
+      .map((g) => {
+        const cls = colors[g.level] || "";
+        return (
+          '<div class="grade ' + cls + '"><h4><span class="badge ' +
+          badges[g.level] + '">' + esc(g.level) + "</span></h4>" +
+          '<div class="rate">📊 ' + esc(g.rate) + "</div>" +
+          "<dl><dt>定义</dt><dd>" + esc(g.define) + "</dd>" +
+          "<dt>快速判断</dt><dd>" + esc(g.quick) + "</dd>" +
+          "<dt>具体表现</dt><dd>" + esc(g.detail) + "</dd></dl></div>"
+        );
+      })
+      .join("");
+    return (
+      '<section class="card"><div class="card-title"><h3>' + esc(s.title) +
+      "</h3>" + src(s.source) + "</div>" + blocks + "</section>"
+    );
+  }
+
+  function renderDoc(s) {
+    const blocks = s.doc
+      .map((b) => {
+        let inner = "";
+        if (b.p) inner += "<p>" + esc(b.p) + "</p>";
+        if (b.kv) {
+          inner += '<div class="kv">' + b.kv.map((k) =>
+            '<div class="k">' + esc(k[0]) + "</div><div>" + esc(k[1]) + "</div>").join("") + "</div>";
+        }
+        if (b.list) {
+          inner += "<ul>" + b.list.map((x) => "<li>" + esc(x) + "</li>").join("") + "</ul>";
+        }
+        if (b.table) {
+          const cls = b.table.headers.length === 2 ? ' class="col2"' : "";
+          const ths = b.table.headers.map((h) => "<th>" + esc(h) + "</th>").join("");
+          const trs = b.table.rows.map((r) =>
+            "<tr>" + r.map((c) => "<td>" + esc(c) + "</td>").join("") + "</tr>").join("");
+          inner += '<div class="table-wrap"><table' + cls + '><thead><tr>' + ths +
+            '</tr></thead><tbody>' + trs + "</tbody></table></div>";
+        }
+        const head = b.h
+          ? '<h4>' + esc(b.h) + "</h4>"
+          : b.sub ? '<h5>' + esc(b.sub) + "</h5>" : "";
+        return '<div class="doc-block">' + head + inner + "</div>";
+      })
+      .join("");
+    return (
+      '<section class="card"><div class="card-title"><h3>' + esc(s.title) +
+      "</h3>" + src(s.source) + "</div>" + blocks + "</section>"
+    );
+  }
+
+  function renderSection(s, q) {
+    switch (s.type) {
+      case "table": return renderTable(s, q);
+      case "logic": return renderLogic(s, q);
+      case "compare": return renderCompare(s, q);
+      case "grade": return renderGrade(s);
+      case "doc": return renderDoc(s);
+      default: return "";
+    }
+  }
+
+  // ---- 页面 ----
+  function categoryPage(key) {
+    const cat = D[key];
+    const html =
+      '<div class="crumbs"><a href="#/home">首页</a> / ' + esc(cat.title) + "</div>" +
+      '<div class="page-head"><h2>🛠️ ' + esc(cat.title) +
+      '</h2><p>共 ' + cat.sections.length + " 个板块 · 内容依据内部 SOP 整理</p></div>" +
+      cat.sections.map((s) => renderSection(s)).join("");
+    view.innerHTML = html;
+    document.title = cat.title + " · 质检培训看板";
+  }
+
+  function standardPage() { categoryPage("standard"); }
+
+  function homePage() {
+    const cats = [
+      { key: "lock", ic: "🔒", desc: "基础质检8项 · 单开/通开识别" },
+      { key: "light", ic: "💡", desc: "欧美规区别 · 摔箱测试SOP" },
+      { key: "track", ic: "🛤️", desc: "外观/尺寸/包装/功能/配件" },
+      { key: "standard", ic: "📋", desc: "缺陷分级 · 异常处理 · 拍照标准" }
+    ];
+    const cards = cats
+      .map((c) => {
+        const cat = D[c.key];
+        return (
+          '<a class="cat-card" href="#/' + c.key + '"><span class="tag" style="background:' +
+          cat.color + '"></span><span class="ic">' + c.ic + "</span><h3>" +
+          esc(cat.title) + "</h3><p>" + esc(c.desc) + "</p></a>"
+        );
+      })
+      .join("");
+    const stats =
+      '<div class="stat"><div class="n">8</div><div class="l">门锁质检项</div></div>' +
+      '<div class="stat"><div class="n">7</div><div class="l">欧美规对比项</div></div>' +
+      '<div class="stat"><div class="n">9</div><div class="l">摔箱测试章节</div></div>' +
+      '<div class="stat"><div class="n">5</div><div class="l">导轨质检项</div></div>' +
+      '<div class="stat"><div class="n">3</div><div class="l">缺陷分级</div></div>';
+    view.innerHTML =
+      '<div class="hero"><p class="big">质检员培训学习看板</p><p class="lead">' +
+      "按 <b>门锁 · 灯饰 · 导轨</b> 三大品类分类，附通用判定标准。所有内容直接来自内部 SOP，" +
+      "可随时检索查阅，建议生产/质检现场参考使用。</p></div>" +
+      '<div class="cat-grid">' + cards + "</div>" +
+      '<div class="stat-row">' + stats + "</div>";
+    document.title = "质检培训看板 · 门锁 / 灯饰 / 导轨";
+  }
+
+  // ---- 搜索（跨全部品类） ----
+  function searchPage(q) {
+    const ql = q.toLowerCase();
+    const cats = [
+      { key: "lock", ic: "🔒" },
+      { key: "light", ic: "💡" },
+      { key: "track", ic: "🛤️" },
+      { key: "standard", ic: "📋" }
+    ];
+    let hits = [];
+    cats.forEach((c) => {
+      D[c.key].sections.forEach((s) => {
+        const collect = (text, ctx) => {
+          if (text && String(text).toLowerCase().includes(ql)) {
+            hits.push({ cat: c, sec: s, ctx: ctx || s.title, text: String(text) });
+          }
+        };
+        if (s.rows) s.rows.forEach((r) => r.forEach((x) => collect(x, s.title)));
+        if (s.pairs) s.pairs.forEach((p) => { collect(p.us, p.item + "（美国）"); collect(p.eu, p.item + "（欧洲）"); collect(p.item, "对比项"); });
+        if (s.examples) s.examples.forEach((e) => { e.vals.forEach((v) => collect(v, e.label)); collect(e.label, "标签"); });
+        if (s.rules) s.rules.forEach((r) => collect(r, s.title + " 规则"));
+        if (s.grades) s.grades.forEach((g) => { collect(g.define, g.level); collect(g.quick, g.level); collect(g.detail, g.level); collect(g.rate, g.level); });
+        if (s.doc) s.doc.forEach((b) => { collect(b.p, b.h || b.sub); if (b.list) b.list.forEach((x) => collect(x, b.h || b.sub)); if (b.kv) b.kv.forEach((k) => { collect(k[1], k[0]); }); });
+      });
+    });
+    let body;
+    if (!hits.length) {
+      body = '<div class="hero"><p class="big">🔍 没有找到 “' + esc(q) + '”</p><p class="lead">试试：单开、通开、摔箱、关键缺陷、CE、UL、卡顿、电镀 ……</p></div>';
+    } else {
+      body =
+        '<div class="crumbs"><a href="#/home">首页</a> / 搜索结果</div>' +
+        '<div class="page-head"><h2>🔍 “' + esc(q) + '” 的搜索结果</h2><p>共 ' + hits.length + " 条命中，已跨全部品类检索</p></div>" +
+        hits.slice(0, 80)
+          .map((h) => {
+            const t = esc(h.text).replace(/\n/g, "<br>");
+            const re = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "ig");
+            const hi = t.replace(re, "<mark>$1</mark>");
+            return (
+              '<a class="cat-card" href="#/' + h.cat.key + '" style="margin-bottom:14px"><span class="ic" style="font-size:22px">' +
+              h.cat.ic + "</span><h3 style=\"font-size:14px\">" + esc(h.ctx) + "</h3><p>" +
+              hi + "</p></a>"
+            );
+          })
+          .join("");
+    }
+    view.innerHTML = body;
+    document.title = "搜索：" + q + " · 质检培训看板";
+  }
+
+  // ---- 路由 ----
+  const routes = { home: homePage, lock: categoryPage, light: categoryPage, track: categoryPage, standard: standardPage };
+  function router() {
+    const hash = location.hash.replace(/^#\/?/, "");
+    const q = document.getElementById("searchBox").value.trim();
+    // 高亮 tab
+    document.querySelectorAll(".tab").forEach((t) =>
+      t.classList.toggle("active", t.dataset.route === hash));
+    if (q && hash !== "search") {
+      // 保留搜索框内容但不强制搜索页
+    }
+    if (hash === "search") {
+      searchPage(q);
+      return;
+    }
+    const fn = routes[hash];
+    if (fn) {
+      if (hash === "home") fn();
+      else fn(hash);
+    } else {
+      location.hash = "#/home";
+    }
+    window.scrollTo(0, 0);
+  }
+
+  // 搜索框：回车跳转搜索页，清空回首页
+  const box = document.getElementById("searchBox");
+  box.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const v = box.value.trim();
+      if (v) { location.hash = "#/search"; router(); }
+    }
+  });
+  box.addEventListener("input", () => {
+    if (!box.value.trim() && location.hash.replace(/^#\/?/, "") === "search") {
+      location.hash = "#/home";
+    }
+  });
+
+  if (verEl) verEl.textContent = "· " + D.meta.version;
+  window.addEventListener("hashchange", router);
+  if (!location.hash) location.hash = "#/home";
+  router();
+})();
+
+</script>
+</body>
+</html>
