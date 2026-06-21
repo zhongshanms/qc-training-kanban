@@ -1,4 +1,4 @@
-/* app.js — 质检培训看板前端逻辑（纯客户端 SPA） */
+/* app.js — 质检基础流程看板前端逻辑（纯客户端 SPA） */
 (function () {
   "use strict";
   const D = window.QC_DATA;
@@ -168,7 +168,7 @@
       '</h2><p>共 ' + cat.sections.length + " 个板块 · 内容依据内部 SOP 整理</p></div>" +
       cat.sections.map((s) => renderSection(s)).join("");
     view.innerHTML = html;
-    document.title = cat.title + " · 质检培训看板";
+    document.title = cat.title + " · 质检基础流程看板";
   }
 
   function standardPage() { categoryPage("standard"); }
@@ -203,7 +203,7 @@
       "可随时检索查阅，建议生产/质检现场参考使用。</p></div>" +
       '<div class="cat-grid">' + cards + "</div>" +
       '<div class="stat-row">' + stats + "</div>";
-    document.title = "质检培训看板 · 门锁 / 灯饰 / 导轨";
+    document.title = "质检基础流程看板 · 门锁 / 灯饰 / 导轨";
   }
 
   // ---- 搜索（跨全部品类） ----
@@ -252,7 +252,7 @@
           .join("");
     }
     view.innerHTML = body;
-    document.title = "搜索：" + q + " · 质检培训看板";
+    document.title = "搜索：" + q + " · 质检基础流程看板";
   }
 
   // ---- 路由 ----
