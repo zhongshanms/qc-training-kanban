@@ -256,26 +256,44 @@
   }
 
   // ---- 路由 ----
-  const routes = { home: homePage, lock: categoryPage, light: categoryPage, track: categoryPage, standard: standardPage };
+  let initialLoad = true;  // 首次加载标志，用来强制首页
   function router() {
-    const hash = location.hash.replace(/^#\/?/, "");
+    const hashRaw = location.hash.replace(/^#\/?/, "");
     const q = document.getElementById("searchBox").value.trim();
+
     // 高亮 tab
     document.querySelectorAll(".tab").forEach((t) =>
-      t.classList.toggle("active", t.dataset.route === hash));
-    if (q && hash !== "search") {
-      // 保留搜索框内容但不强制搜索页
+      t.classList.toggle("active", t.dataset.route === hashRaw));
+
+    // 首次加载：强制首页，忽略浏览器记忆的 hash
+    if (initialLoad) {
+      initialLoad = false;
+      if (hashRaw !== "home") {
+        location.hash = "#/home";
+        return; // hash 变化会触发 hashchange 再次进入 router
+      }
     }
-    if (hash === "search") {
+
+    if (q && hashRaw === "search") {
       searchPage(q);
+      window.scrollTo(0, 0);
       return;
     }
-    const fn = routes[hash];
-    if (fn) {
-      if (hash === "home") fn();
-      else fn(hash);
+
+    // 渲染对应页面
+    if (hashRaw === "home") {
+      homePage();
+    } else if (hashRaw === "lock") {
+      categoryPage("lock");
+    } else if (hashRaw === "light") {
+      categoryPage("light");
+    } else if (hashRaw === "track") {
+      categoryPage("track");
+    } else if (hashRaw === "standard") {
+      standardPage();
     } else {
       location.hash = "#/home";
+      return;
     }
     window.scrollTo(0, 0);
   }
@@ -296,6 +314,7 @@
 
   if (verEl) verEl.textContent = "· " + D.meta.version;
   window.addEventListener("hashchange", router);
-  if (!location.hash) location.hash = "#/home";
+  // 强制首页：每次打开页面都显示首页
+  location.hash = "#/home";
   router();
 })();
