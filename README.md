@@ -108,9 +108,9 @@ https://qctraining-1250000000.cos-website.ap-guangzhou.myqcloud.com/
 ---
 
 ## 📝 数据来源
-- 门锁基础质检流程.xlsx / 门锁单开通开逻辑.xlsx
+- 灯饰+门锁+导轨质检不良备注3.0.xlsx（V2 更新：三大品类基础质检流程同步至3.0）
+- 门锁单开通开逻辑.xlsx
 - 欧美规灯饰质检项区别.xlsx / 易碎灯饰摔箱测试SOP.docx
-- 导轨基础质检流程.xlsx
 - 收发货不良判定标准V1.xlsx
 
 > 注：`收发货不良判定标准V1.xlsx` 中带 `=DISPIMG(...)` 的图片引用在原文件内

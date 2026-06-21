@@ -176,7 +176,7 @@
   function homePage() {
     const cats = [
       { key: "lock", ic: "🔒", desc: "基础质检8项 · 单开/通开识别" },
-      { key: "light", ic: "💡", desc: "欧美规区别 · 摔箱测试SOP" },
+      { key: "light", ic: "💡", desc: "基础质检7项 · 欧美规区别 · 摔箱测试SOP" },
       { key: "track", ic: "🛤️", desc: "外观/尺寸/包装/功能/配件" },
       { key: "standard", ic: "📋", desc: "缺陷分级 · 异常处理 · 拍照标准" }
     ];
@@ -192,6 +192,7 @@
       .join("");
     const stats =
       '<div class="stat"><div class="n">8</div><div class="l">门锁质检项</div></div>' +
+      '<div class="stat"><div class="n">7</div><div class="l">灯饰质检项</div></div>' +
       '<div class="stat"><div class="n">7</div><div class="l">欧美规对比项</div></div>' +
       '<div class="stat"><div class="n">9</div><div class="l">摔箱测试章节</div></div>' +
       '<div class="stat"><div class="n">5</div><div class="l">导轨质检项</div></div>' +
