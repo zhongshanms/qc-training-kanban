@@ -37,7 +37,7 @@
     const ths = s.headers
       .map((h, i) => "<th" + (i === 0 ? ' class="num"' : "") + ">" + esc(h) + "</th>")
       .join("");
-    const cls = s.headers.length === 2 ? ' class="col2"' : "";
+    const cls = s.headers.length === 2 ? (s.narrow ? ' class="col2-narrow"' : ' class="col2"') : "";
     return (
       '<section class="card"><div class="card-title"><h3>' +
       esc(s.title) + "</h3>" + src(s.source) +

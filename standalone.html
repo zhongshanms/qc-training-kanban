@@ -86,6 +86,8 @@ th{background:#f9fafb;font-weight:600;color:#374151;position:sticky;top:0}
 tbody tr:hover{background:#fafbfc}
 table.col2 th:first-child,table.col2 td:first-child{width:42%}
 table.col2 th:last-child,table.col2 td:last-child{width:58%}
+table.col2-narrow th:first-child,table.col2-narrow td:first-child{width:auto;white-space:nowrap}
+table.col2-narrow th:last-child,table.col2-narrow td:last-child{width:auto}
 td.num,th.num{width:54px;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
 .mono{font-family:Consolas,"Courier New",monospace}
 pre.cell{white-space:pre-wrap;margin:0;font-family:inherit;font-size:14px}
@@ -568,6 +570,7 @@ window.QC_DATA = {
       },
       {
         type: "table",
+        narrow: true,
         title: "公司现有主要品牌汇总",
         source: "品牌汇总.xlsx",
         note: "共 10 个品牌，覆盖灯饰 / 导轨 / 门锁 / 乌龟车品类",
@@ -629,7 +632,7 @@ window.QC_DATA = {
     const ths = s.headers
       .map((h, i) => "<th" + (i === 0 ? ' class="num"' : "") + ">" + esc(h) + "</th>")
       .join("");
-    const cls = s.headers.length === 2 ? ' class="col2"' : "";
+    const cls = s.headers.length === 2 ? (s.narrow ? ' class="col2-narrow"' : ' class="col2"') : "";
     return (
       '<section class="card"><div class="card-title"><h3>' +
       esc(s.title) + "</h3>" + src(s.source) +
