@@ -78,7 +78,7 @@ th{background:#f9fafb;font-weight:600;color:#374151;position:sticky;top:0}
 tbody tr:hover{background:#fafbfc}
 table.col2 th:first-child,table.col2 td:first-child{width:42%}
 table.col2 th:last-child,table.col2 td:last-child{width:58%}
-table.col2-narrow th:first-child,table.col2-narrow td:first-child{width:100px;white-space:nowrap;padding-left:6px}
+table.col2-narrow th:first-child,table.col2-narrow td:first-child{width:100px;white-space:nowrap;padding-left:120px}
 table.col2-narrow th:last-child,table.col2-narrow td:last-child{padding-left:8px}
 td.num,th.num{width:54px;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
 .mono{font-family:Consolas,"Courier New",monospace}
