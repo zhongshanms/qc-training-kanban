@@ -155,6 +155,26 @@
     );
   }
 
+  function renderBrandGrid(s, q) {
+    const heads = s.headers
+      .map((h) => '<div class="bh">' + esc(h) + "</div>")
+      .join("");
+    const rows = s.rows
+      .map((r) => {
+        return (
+          '<div class="bc brand">' + cell(r[0], q) + "</div>" +
+          '<div class="bc">' + cell(r[1], q) + "</div>"
+        );
+      })
+      .join("");
+    return (
+      '<section class="card"><div class="card-title"><h3>' +
+      esc(s.title) + "</h3>" + src(s.source) +
+      '</div>' + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "") +
+      '<div class="brand-grid">' + heads + rows + "</div></section>"
+    );
+  }
+
   function renderSection(s, q) {
     switch (s.type) {
       case "table": return renderTable(s, q);
@@ -162,6 +182,7 @@
       case "compare": return renderCompare(s, q);
       case "grade": return renderGrade(s);
       case "doc": return renderDoc(s);
+      case "brand-grid": return renderBrandGrid(s, q);
       default: return "";
     }
   }
@@ -230,8 +251,7 @@
             hits.push({ cat: c, sec: s, ctx: ctx || s.title, text: String(text) });
           }
         };
-        if (s.rows) s.rows.forEach((r) => r.forEach((x) => collect(x, s.title)));
-        if (s.pairs) s.pairs.forEach((p) => { collect(p.us, p.item + "（美国）"); collect(p.eu, p.item + "（欧洲）"); collect(p.item, "对比项"); });
+        if (s.rows) s.rows.forEach((r) => r.forEach((x) => collect(x, s.title)));        if (s.pairs) s.pairs.forEach((p) => { collect(p.us, p.item + "（美国）"); collect(p.eu, p.item + "（欧洲）"); collect(p.item, "对比项"); });
         if (s.examples) s.examples.forEach((e) => { e.vals.forEach((v) => collect(v, e.label)); collect(e.label, "标签"); });
         if (s.rules) s.rules.forEach((r) => collect(r, s.title + " 规则"));
         if (s.grades) s.grades.forEach((g) => { collect(g.define, g.level); collect(g.quick, g.level); collect(g.detail, g.level); collect(g.rate, g.level); });

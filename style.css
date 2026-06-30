@@ -78,8 +78,26 @@ th{background:#f9fafb;font-weight:600;color:#374151;position:sticky;top:0}
 tbody tr:hover{background:#fafbfc}
 table.col2 th:first-child,table.col2 td:first-child{width:42%}
 table.col2 th:last-child,table.col2 td:last-child{width:58%}
-table.col2-narrow th:first-child,table.col2-narrow td:first-child{width:100px;white-space:nowrap;padding-left:120px}
-table.col2-narrow th:last-child,table.col2-narrow td:last-child{padding-left:140px}
+/* ===== brand-grid ===== */
+.brand-grid{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:0 80px;
+  font-size:14px;
+  border-bottom:1px solid var(--line);
+}
+.brand-grid .bh{
+  font-weight:600;color:#374151;
+  background:#f9fafb;padding:11px 15px;
+  border-bottom:1px solid var(--line);
+}
+.brand-grid .bc{
+  padding:11px 15px;border-bottom:1px solid var(--line);
+}
+.brand-grid .bc.brand{font-weight:600;font-family:Consolas,"Courier New",monospace}
+@media(max-width:520px){
+  .brand-grid{grid-template-columns:120px 1fr;gap:0 30px}
+}
 td.num,th.num{width:54px;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
 .mono{font-family:Consolas,"Courier New",monospace}
 pre.cell{white-space:pre-wrap;margin:0;font-family:inherit;font-size:14px}

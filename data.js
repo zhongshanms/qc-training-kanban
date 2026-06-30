@@ -267,8 +267,7 @@ window.QC_DATA = {
         ]
       },
       {
-        type: "table",
-        narrow: true,
+        type: "brand-grid",
         title: "公司现有主要品牌汇总",
         source: "品牌汇总.xlsx",
         note: "共 10 个品牌，覆盖灯饰 / 导轨 / 门锁 / 乌龟车品类",

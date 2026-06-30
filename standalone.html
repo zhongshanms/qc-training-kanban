@@ -86,8 +86,26 @@ th{background:#f9fafb;font-weight:600;color:#374151;position:sticky;top:0}
 tbody tr:hover{background:#fafbfc}
 table.col2 th:first-child,table.col2 td:first-child{width:42%}
 table.col2 th:last-child,table.col2 td:last-child{width:58%}
-table.col2-narrow th:first-child,table.col2-narrow td:first-child{width:auto;white-space:nowrap}
-table.col2-narrow th:last-child,table.col2-narrow td:last-child{width:auto}
+/* ===== brand-grid ===== */
+.brand-grid{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:0 80px;
+  font-size:14px;
+  border-bottom:1px solid var(--line);
+}
+.brand-grid .bh{
+  font-weight:600;color:#374151;
+  background:#f9fafb;padding:11px 15px;
+  border-bottom:1px solid var(--line);
+}
+.brand-grid .bc{
+  padding:11px 15px;border-bottom:1px solid var(--line);
+}
+.brand-grid .bc.brand{font-weight:600;font-family:Consolas,"Courier New",monospace}
+@media(max-width:520px){
+  .brand-grid{grid-template-columns:120px 1fr;gap:0 30px}
+}
 td.num,th.num{width:54px;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
 .mono{font-family:Consolas,"Courier New",monospace}
 pre.cell{white-space:pre-wrap;margin:0;font-family:inherit;font-size:14px}
@@ -569,8 +587,7 @@ window.QC_DATA = {
         ]
       },
       {
-        type: "table",
-        narrow: true,
+        type: "brand-grid",
         title: "公司现有主要品牌汇总",
         source: "品牌汇总.xlsx",
         note: "共 10 个品牌，覆盖灯饰 / 导轨 / 门锁 / 乌龟车品类",
@@ -750,6 +767,26 @@ window.QC_DATA = {
     );
   }
 
+  function renderBrandGrid(s, q) {
+    const heads = s.headers
+      .map((h) => '<div class="bh">' + esc(h) + "</div>")
+      .join("");
+    const rows = s.rows
+      .map((r) => {
+        return (
+          '<div class="bc brand">' + cell(r[0], q) + "</div>" +
+          '<div class="bc">' + cell(r[1], q) + "</div>"
+        );
+      })
+      .join("");
+    return (
+      '<section class="card"><div class="card-title"><h3>' +
+      esc(s.title) + "</h3>" + src(s.source) +
+      '</div>' + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "") +
+      '<div class="brand-grid">' + heads + rows + "</div></section>"
+    );
+  }
+
   function renderSection(s, q) {
     switch (s.type) {
       case "table": return renderTable(s, q);
@@ -757,6 +794,7 @@ window.QC_DATA = {
       case "compare": return renderCompare(s, q);
       case "grade": return renderGrade(s);
       case "doc": return renderDoc(s);
+      case "brand-grid": return renderBrandGrid(s, q);
       default: return "";
     }
   }
@@ -825,8 +863,7 @@ window.QC_DATA = {
             hits.push({ cat: c, sec: s, ctx: ctx || s.title, text: String(text) });
           }
         };
-        if (s.rows) s.rows.forEach((r) => r.forEach((x) => collect(x, s.title)));
-        if (s.pairs) s.pairs.forEach((p) => { collect(p.us, p.item + "（美国）"); collect(p.eu, p.item + "（欧洲）"); collect(p.item, "对比项"); });
+        if (s.rows) s.rows.forEach((r) => r.forEach((x) => collect(x, s.title)));        if (s.pairs) s.pairs.forEach((p) => { collect(p.us, p.item + "（美国）"); collect(p.eu, p.item + "（欧洲）"); collect(p.item, "对比项"); });
         if (s.examples) s.examples.forEach((e) => { e.vals.forEach((v) => collect(v, e.label)); collect(e.label, "标签"); });
         if (s.rules) s.rules.forEach((r) => collect(r, s.title + " 规则"));
         if (s.grades) s.grades.forEach((g) => { collect(g.define, g.level); collect(g.quick, g.level); collect(g.detail, g.level); collect(g.rate, g.level); });
