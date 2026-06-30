@@ -1,8 +1,8 @@
 @echo off
 chcp 936 >nul
-title binboard - GitHub Pages 部署
+title 质检培训看板 - GitHub Pages 部署
 echo ============================================
-echo  binboard - GitHub Pages 一键部署
+echo  质检培训看板 - GitHub Pages 一键部署
 echo ============================================
 echo.
 echo 正在启动 PowerShell 部署脚本...

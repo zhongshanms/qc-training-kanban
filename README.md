@@ -85,33 +85,32 @@ https://qctraining-1250000000.cos-website.ap-guangzhou.myqcloud.com/
 
 脚本会：
 1. 检查 GitHub CLI 登录状态（未登录则引导你登录）
-2. 自动创建公共仓库 `zhongshanms/binboard`
-3. 推送代码
-4. 启用 GitHub Pages
+2. 推送代码到仓库 `zhongshanms/qc-training-kanban`
+3. 启用 GitHub Pages
 
-访问地址：`https://zhongshanms.github.io/binboard/`
+访问地址：`https://zhongshanms.github.io/qc-training-kanban/`
 
 ### 方法 B：手动操作
 如果你偏好手动操作：
-1. 在 https://github.com/new 创建一个名为 `binboard` 的公共仓库
+1. 在 https://github.com/new 创建一个名为 `qc-training-kanban` 的公共仓库（或在已有仓库 Settings 中改名为 `qc-training-kanban`）
 2. 在本地执行：
    ```
-   cd C:\Users\cr\ZCodeProject\binboard
-   git remote add origin https://github.com/zhongshanms/binboard.git
+   cd C:\Users\cr\ZCodeProject\质检培训看板
+   git remote add origin https://github.com/zhongshanms/qc-training-kanban.git
    git branch -M main
    git push -u origin main
    ```
 3. 进入仓库 Settings → Pages → 选择 main 分支 → 保存
-4. 等待 1-2 分钟后访问 `https://zhongshanms.github.io/binboard/`
+4. 等待 1-2 分钟后访问 `https://zhongshanms.github.io/qc-training-kanban/`
 
 > 之后内容更新：改完文件后执行 `git add . && git commit -m "update" && git push` 即可自动部署。
 
 ---
 
 ## 📝 数据来源
-- 门锁基础质检流程.xlsx / 门锁单开通开逻辑.xlsx
+- 灯饰+门锁+导轨质检不良备注3.0.xlsx（V2 更新：三大品类基础质检流程同步至3.0）
+- 门锁单开通开逻辑.xlsx
 - 欧美规灯饰质检项区别.xlsx / 易碎灯饰摔箱测试SOP.docx
-- 导轨基础质检流程.xlsx
 - 收发货不良判定标准V1.xlsx
 
 > 注：`收发货不良判定标准V1.xlsx` 中带 `=DISPIMG(...)` 的图片引用在原文件内

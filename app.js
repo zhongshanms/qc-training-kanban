@@ -1,4 +1,4 @@
-/* app.js — 质检培训看板前端逻辑（纯客户端 SPA） */
+/* app.js — 质检基础流程看板前端逻辑（纯客户端 SPA） */
 (function () {
   "use strict";
   const D = window.QC_DATA;
@@ -168,7 +168,7 @@
       '</h2><p>共 ' + cat.sections.length + " 个板块 · 内容依据内部 SOP 整理</p></div>" +
       cat.sections.map((s) => renderSection(s)).join("");
     view.innerHTML = html;
-    document.title = cat.title + " · 质检培训看板";
+    document.title = cat.title + " · 质检基础流程看板";
   }
 
   function standardPage() { categoryPage("standard"); }
@@ -176,7 +176,7 @@
   function homePage() {
     const cats = [
       { key: "lock", ic: "🔒", desc: "基础质检8项 · 单开/通开识别" },
-      { key: "light", ic: "💡", desc: "欧美规区别 · 摔箱测试SOP" },
+      { key: "light", ic: "💡", desc: "基础质检7项 · 欧美规区别 · 摔箱测试SOP" },
       { key: "track", ic: "🛤️", desc: "外观/尺寸/包装/功能/配件" },
       { key: "standard", ic: "📋", desc: "缺陷分级 · 异常处理 · 拍照标准" }
     ];
@@ -192,6 +192,7 @@
       .join("");
     const stats =
       '<div class="stat"><div class="n">8</div><div class="l">门锁质检项</div></div>' +
+      '<div class="stat"><div class="n">7</div><div class="l">灯饰质检项</div></div>' +
       '<div class="stat"><div class="n">7</div><div class="l">欧美规对比项</div></div>' +
       '<div class="stat"><div class="n">9</div><div class="l">摔箱测试章节</div></div>' +
       '<div class="stat"><div class="n">5</div><div class="l">导轨质检项</div></div>' +
@@ -202,7 +203,7 @@
       "可随时检索查阅，建议生产/质检现场参考使用。</p></div>" +
       '<div class="cat-grid">' + cards + "</div>" +
       '<div class="stat-row">' + stats + "</div>";
-    document.title = "质检培训看板 · 门锁 / 灯饰 / 导轨";
+    document.title = "质检基础流程看板 · 门锁 / 灯饰 / 导轨";
   }
 
   // ---- 搜索（跨全部品类） ----
@@ -251,30 +252,48 @@
           .join("");
     }
     view.innerHTML = body;
-    document.title = "搜索：" + q + " · 质检培训看板";
+    document.title = "搜索：" + q + " · 质检基础流程看板";
   }
 
   // ---- 路由 ----
-  const routes = { home: homePage, lock: categoryPage, light: categoryPage, track: categoryPage, standard: standardPage };
+  let initialLoad = true;  // 首次加载标志，用来强制首页
   function router() {
-    const hash = location.hash.replace(/^#\/?/, "");
+    const hashRaw = location.hash.replace(/^#\/?/, "");
     const q = document.getElementById("searchBox").value.trim();
+
     // 高亮 tab
     document.querySelectorAll(".tab").forEach((t) =>
-      t.classList.toggle("active", t.dataset.route === hash));
-    if (q && hash !== "search") {
-      // 保留搜索框内容但不强制搜索页
+      t.classList.toggle("active", t.dataset.route === hashRaw));
+
+    // 首次加载：强制首页，忽略浏览器记忆的 hash
+    if (initialLoad) {
+      initialLoad = false;
+      if (hashRaw !== "home") {
+        location.hash = "#/home";
+        return; // hash 变化会触发 hashchange 再次进入 router
+      }
     }
-    if (hash === "search") {
+
+    if (q && hashRaw === "search") {
       searchPage(q);
+      window.scrollTo(0, 0);
       return;
     }
-    const fn = routes[hash];
-    if (fn) {
-      if (hash === "home") fn();
-      else fn(hash);
+
+    // 渲染对应页面
+    if (hashRaw === "home") {
+      homePage();
+    } else if (hashRaw === "lock") {
+      categoryPage("lock");
+    } else if (hashRaw === "light") {
+      categoryPage("light");
+    } else if (hashRaw === "track") {
+      categoryPage("track");
+    } else if (hashRaw === "standard") {
+      standardPage();
     } else {
       location.hash = "#/home";
+      return;
     }
     window.scrollTo(0, 0);
   }
@@ -295,6 +314,7 @@
 
   if (verEl) verEl.textContent = "· " + D.meta.version;
   window.addEventListener("hashchange", router);
-  if (!location.hash) location.hash = "#/home";
+  // 强制首页：每次打开页面都显示首页
+  location.hash = "#/home";
   router();
 })();

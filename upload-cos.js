@@ -74,8 +74,11 @@ function buildAuth(method, pathname, headers, params) {
   const keyTime = `${now};${now + 600}`;
   const signKey = hmacSha1(SECRET_KEY, keyTime);
   // HttpString
-  const lowerHeaders = Object.keys(headers).map((k) => k.toLowerCase()).sort().map((k) => `${k}=${headers[k]}`).join("&");
-  const headerList = Object.keys(headers).map((k) => k.toLowerCase()).sort().join(";");
+  // COS v5 签名要求 header key 全小写，value 需 URL 编码
+  const hdrLookup = {};
+  Object.keys(headers).forEach((k) => { hdrLookup[k.toLowerCase()] = headers[k]; });
+  const headerList = Object.keys(hdrLookup).sort().join(";");
+  const lowerHeaders = headerList.split(";").map((k) => `${k}=${encodeURIComponent(hdrLookup[k])}`).join("&");
   const paramStr = Object.keys(params).sort().map((k) => `${k}=${params[k]}`).join("&");
   const paramList = Object.keys(params).sort().join(";");
   const httpString = `${method.toLowerCase()}\n${pathname}\n${paramStr}\n${lowerHeaders}\n`;
