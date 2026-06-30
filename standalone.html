@@ -737,9 +737,9 @@ window.QC_DATA = {
         }
         if (b.imgs) {
           inner += b.imgs.map((img) =>
-            '<figure style="margin:16px 0;text-align:center">' +
-            '<img src="' + img.src + '" alt="' + esc(img.alt) + '" loading="lazy" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1)">' +
-            '<figcaption style="margin-top:8px;font-size:13px;color:var(--muted)">' + esc(img.alt) + '</figcaption></figure>'
+            '<figure style="margin:8px 0 16px;display:flex;gap:14px;align-items:flex-start">' +
+            '<img src="' + img.src + '" alt="' + esc(img.alt) + '" loading="lazy" style="width:120px;height:120px;object-fit:cover;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);flex-shrink:0">' +
+            '<figcaption style="font-size:14px;color:var(--ink);line-height:1.6;padding-top:4px">' + esc(img.alt) + '</figcaption></figure>'
           ).join("");
         }
         if (b.table) {
