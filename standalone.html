@@ -93,21 +93,24 @@ table.col2 th:last-child,table.col2 td:last-child{width:58%}
   column-gap:80px;
   row-gap:0;
   font-size:14px;
-  border-bottom:1px solid var(--line);
-  overflow-x:auto;
+  border:1px solid var(--line);
+  border-radius:8px;
+  overflow:hidden;
 }
 .brand-grid .bh{
   font-weight:600;color:#374151;
-  background:#f9fafb;padding:11px 15px;
-  border-bottom:1px solid var(--line);
+  background:#f9fafb;padding:14px 18px;
+  border-bottom:2px solid var(--line);
   white-space:nowrap;
 }
 .brand-grid .bc{
-  padding:11px 15px;border-bottom:1px solid var(--line);
+  padding:14px 18px;
+  border-bottom:1px solid var(--line);
   white-space:nowrap;
   min-width:0;
 }
 .brand-grid .bc.brand{font-weight:600;font-family:Consolas,"Courier New",monospace}
+.brand-grid .bc:nth-last-child(-n+2){border-bottom:none}
 .brand-grid pre.cell{white-space:nowrap}
 @media(max-width:520px){
   .brand-grid{grid-template-columns:120px 1fr;gap:0 30px}
