@@ -265,25 +265,6 @@ window.QC_DATA = {
             ]
           }
         ]
-      },
-      {
-        type: "brand-grid",
-        title: "公司现有主要品牌汇总",
-        source: "品牌汇总.xlsx",
-        note: "共 10 个品牌，覆盖灯饰 / 导轨 / 门锁 / 乌龟车品类",
-        headers: ["品牌", "对应产品"],
-        rows: [
-          ["Glomuse", "灯饰"],
-          ["Yunnix", "灯饰"],
-          ["majade", "灯饰"],
-          ["LONTAN", "导轨"],
-          ["Goldenwarm", "导轨/门锁/合页"],
-          ["Homdiy", "导轨"],
-          ["UBISIN", "导轨"],
-          ["Haidms", "门锁/合页"],
-          ["Insdawn", "乌龟车"],
-          ["Nellyke", "乌龟车"]
-        ]
       }
     ]
   }
