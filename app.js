@@ -128,6 +128,13 @@
         if (b.list) {
           inner += "<ul>" + b.list.map((x) => "<li>" + esc(x) + "</li>").join("") + "</ul>";
         }
+        if (b.imgs) {
+          inner += b.imgs.map((img) =>
+            '<figure style="margin:16px 0;text-align:center">' +
+            '<img src="' + img.src + '" alt="' + esc(img.alt) + '" loading="lazy" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1)">' +
+            '<figcaption style="margin-top:8px;font-size:13px;color:var(--muted)">' + esc(img.alt) + '</figcaption></figure>'
+          ).join("");
+        }
         if (b.table) {
           const cls = b.table.headers.length === 2 ? ' class="col2"' : "";
           const ths = b.table.headers.map((h) => "<th>" + esc(h) + "</th>").join("");
