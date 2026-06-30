@@ -162,8 +162,8 @@
     const rows = s.rows
       .map((r) => {
         return (
-          '<div class="bc brand">' + cell(r[0], q) + "</div>" +
-          '<div class="bc">' + cell(r[1], q) + "</div>"
+          '<div class="bc brand">' + esc(r[0]) + "</div>" +
+          '<div class="bc">' + esc(r[1]) + "</div>"
         );
       })
       .join("");

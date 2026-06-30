@@ -89,20 +89,26 @@ table.col2 th:last-child,table.col2 td:last-child{width:58%}
 /* ===== brand-grid ===== */
 .brand-grid{
   display:grid;
-  grid-template-columns:200px 1fr;
-  gap:0 80px;
+  grid-template-columns:240px 1fr;
+  column-gap:80px;
+  row-gap:0;
   font-size:14px;
   border-bottom:1px solid var(--line);
+  overflow-x:auto;
 }
 .brand-grid .bh{
   font-weight:600;color:#374151;
   background:#f9fafb;padding:11px 15px;
   border-bottom:1px solid var(--line);
+  white-space:nowrap;
 }
 .brand-grid .bc{
   padding:11px 15px;border-bottom:1px solid var(--line);
+  white-space:nowrap;
+  min-width:0;
 }
 .brand-grid .bc.brand{font-weight:600;font-family:Consolas,"Courier New",monospace}
+.brand-grid pre.cell{white-space:nowrap}
 @media(max-width:520px){
   .brand-grid{grid-template-columns:120px 1fr;gap:0 30px}
 }
@@ -774,8 +780,8 @@ window.QC_DATA = {
     const rows = s.rows
       .map((r) => {
         return (
-          '<div class="bc brand">' + cell(r[0], q) + "</div>" +
-          '<div class="bc">' + cell(r[1], q) + "</div>"
+          '<div class="bc brand">' + esc(r[0]) + "</div>" +
+          '<div class="bc">' + esc(r[1]) + "</div>"
         );
       })
       .join("");
