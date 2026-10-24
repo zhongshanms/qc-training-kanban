@@ -203,10 +203,10 @@
 
   function homePage() {
     const cats = [
-      { key: "lock", ic: "🔒", desc: "基础质检8项 · 单开/通开识别" },
-      { key: "light", ic: "💡", desc: "基础质检12项 · 欧美规区别 · 摔箱测试SOP" },
-      { key: "track", ic: "🛤️", desc: "外观/尺寸/包装/功能/配件" },
-      { key: "standard", ic: "📋", desc: "缺陷分级 · 异常处理 · 拍照标准" }
+      { key: "lock", ic: "🔒", desc: "出货7项 · 缺陷分级 · 单开/通开识别" },
+      { key: "light", ic: "💡", desc: "收货5项 · 出货10项 · 欧美规区别 · 摔箱SOP" },
+      { key: "track", ic: "🛤️", desc: "收货14项 · 出货11项 · 缺陷分级" },
+      { key: "standard", ic: "📋", desc: "异常处理 · 拍照标准" }
     ];
     const cards = cats
       .map((c) => {
